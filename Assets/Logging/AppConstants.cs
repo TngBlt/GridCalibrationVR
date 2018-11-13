@@ -10,7 +10,7 @@ public static class AppConstants
 
     #region LoggerBehavior Constants
 
-    public const string CsvFirstRow = "local_time;test_name;gaze_world_x;gaze_world_y;left_confidence;right_confidence;" +
+    public const string CsvFirstRow = "local_time;test_name;gaze_x;gaze_y;left_confidence;right_confidence;" +
     "first_time_entry;target_x;target_y;radius_percent";
 
     #endregion

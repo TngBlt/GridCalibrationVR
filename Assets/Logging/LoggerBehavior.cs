@@ -66,8 +66,8 @@ public class LoggerBehavior : MonoBehaviour
         {
             a = DateTime.Now,
             c = test_name,
-            d = PupilData._2D.GazePosition != Vector2.zero ? gazeToWorld.x : float.NaN,
-            e = PupilData._2D.GazePosition != Vector2.zero ? gazeToWorld.y : float.NaN,
+            d = gameController != null ? gameController.looking_at_circle.point.x : float.NaN,
+            e = gameController != null ? gameController.looking_at_circle.point.y : float.NaN,
             f = gameController != null ? gameController.pupilDataGetter.left_confidence : float.NaN,
             g = gameController != null ? gameController.pupilDataGetter.right_confidence : float.NaN,
             h = gameController != null ? gameController.travel_time : float.NaN,
