@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
     private int last_index;
     private int target_index;
     private float timeLeft;
-    private RaycastHit looking_at_circle;
+    public RaycastHit looking_at_circle;
     private RaycastHit looking_at_circle_before;
     private float target_timer;
     private float heat_timer;
