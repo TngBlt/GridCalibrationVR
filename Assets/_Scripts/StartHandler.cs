@@ -30,6 +30,10 @@ public class StartHandler : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyUp(KeyCode.I)){
+            StartIPDCalib();
+            Menu.SetActive(false);
+        }
         obj = gridController.GetCurrentCollider();
         if (obj.collider && timer > 0)
         {
@@ -60,7 +64,7 @@ public class StartHandler : MonoBehaviour
             // Print the timer, the seconds is rounded to have 3,2,1 value like seconds
             countDownText.GetComponent<TextMesh>().text = Math.Ceiling(System.Convert.ToDouble(countDown)).ToString();
             countDown -= Time.deltaTime;
-            Menu.transform.position += new Vector3(0, 0, -10.0f);
+            Menu.transform.position += new Vector3(0, 0, -20.0f); // André : Why ?
             if (countDown < 0)
             {
                 print("START");
@@ -84,6 +88,12 @@ public class StartHandler : MonoBehaviour
             }
         }
     }
+
+    private void StartIPDCalib()
+    {
+        
+    }
+
     private void ResetTimer()
     {
         timer = 1.0f;
