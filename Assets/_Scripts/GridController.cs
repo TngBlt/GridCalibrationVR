@@ -53,15 +53,15 @@ public class GridController : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 heading.SetPosition(1, hit.point);
+
                 positionText.text = sceneCamera.transform.InverseTransformDirection(hit.point).ToString();
             }
             else
             {
                 heading.SetPosition(1, ray.origin + ray.direction * 50f);
-            }         
+            }
         }
     }
-
     public RaycastHit GetCurrentCollider()
     {
         return hit;
@@ -69,16 +69,14 @@ public class GridController : MonoBehaviour
 
     public Vector2 getCurrentColliderPosition(RaycastHit collider)
     {
-        if (collider.transform.GetComponent<CapsuleCollider>())
-        {
-            collider.transform.GetComponent<CapsuleCollider>().enabled = false;
-        }
+        collider.transform.GetComponent<CapsuleCollider>().enabled = false;
         Renderer rend = collider.transform.GetComponent<Renderer>();
         MeshCollider meshCollider = collider.collider as MeshCollider;
         Texture2D tex = rend.material.mainTexture as Texture2D;
         Vector2 pixelUV = collider.textureCoord;
         pixelUV.x *= tex.width;
         pixelUV.y *= tex.height;
+
         return pixelUV;
     }
 }

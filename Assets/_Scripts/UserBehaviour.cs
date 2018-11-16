@@ -5,112 +5,78 @@ using UnityEngine;
 
 public class UserBehaviour : MonoBehaviour{
 
-    public GridController grCtrl;
+    public GridController ctrl;
 
-    private GameController gmCtrl;
-    private GameObject copy;
     private Vector2 pixelUV;
     private Vector2 prevPixelUV;
     private List<Vector2> hitpoints;
-    private List<float> distances;
-    private bool control = false;
-    private bool createCopy = true;
-    private float dispersion = 0;
-    private int layerMask;
-    private RaycastHit hitLayer;
+    private bool control;
+    private float dispersion;
 
     private float timer = 0;
+
 
 	// Use this for initialization
 	void Start () {
         hitpoints = new List<Vector2>();
-        distances = new List<float>();
-        gmCtrl = GetComponent<GameController>();
-        layerMask = LayerMask.GetMask("Copy");
-    }
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        print(" Distance : " + dispersion);
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (grCtrl.GetCurrentCollider().collider)
+        if (ctrl.GetCurrentCollider().collider)
         {
-            if (grCtrl.GetCurrentCollider().collider.name == "Cylinder")
+            if (ctrl.GetCurrentCollider().collider.name == "Cylinder")
             {
+                pixelUV = ctrl.getCurrentColliderPosition(ctrl.GetCurrentCollider());
 
-                if (createCopy)
+                if(prevPixelUV != null && pixelUV != prevPixelUV)
                 {
-                    copyTarget(gmCtrl.last_target.circle);
-                    createCopy = false;
+                    control = true;
+                    timer = 0;
+                    prevPixelUV = pixelUV;
                 }
-
-          
-                if(GameObject.Find("Copy") != null)
+                else
                 {
-                    if (Physics.Raycast(grCtrl.transform.position, Vector3.forward, out hitLayer, 10000, layerMask, QueryTriggerInteraction.Ignore))
-                    {
-                        pixelUV = grCtrl.getCurrentColliderPosition(hitLayer);
-                    }
+                    prevPixelUV = pixelUV;
                 }
 
                 timer += Time.deltaTime;
-                if (timer > 0.1f)
+                
+                if(timer > 0.20f && control)
                 {
                     hitpoints.Add(pixelUV);
-                    if (hitpoints.Count >= 2)
+                    if (hitpoints.Count == 2)
                     {
-                        if (hitpoints[hitpoints.Count - 2] != hitpoints[hitpoints.Count - 1])
-                        {
-                            hitDispersion(hitpoints[hitpoints.Count - 2], hitpoints[hitpoints.Count - 1]);
-                        }
-
+                        hitDispersion(hitpoints[0], hitpoints[1]);
+                        Vector2 newPoint = hitpoints[1];
+                        hitpoints.Clear();
+                        hitpoints.Add(newPoint);
                     }
-                    timer = 0;
+                    control = false;
                 }
-
+                else
+                {
+                    dispersion = 0;
+                }
+               
             }
             else
             {
-                if (hitpoints != null)
+                if(hitpoints != null)
                 {
                     hitpoints.Clear();
                 }
-
-                if (distances != null)
-                {
-                    distances.Clear();
-                }
-
-                Destroy(copy);
-                createCopy = true;
             }
-
         }
-    }
+		
+	}
 
 
     private void hitDispersion(Vector2 dis1, Vector2 dis2)
     {
-        distances.Add(Vector2.Distance(dis1, dis2));
-        dispersion = disMoy(distances);
-    }
-
-    private float disMoy(List<float> dis)
-    {
-        float sum = 0;
-        foreach(float d in dis)
-        {
-            sum += d;
-        }
-
-        return sum / dis.Count;
-    }
-
-    private void copyTarget(GameObject target)
-    {
-        copy = GameObject.Instantiate(target, target.transform.parent);
-        copy.name = "Copy";
-        copy.layer = 9;
-        copy.GetComponent<Renderer>().enabled = false;
+        dispersion = Vector2.Distance(dis1, dis2);
     }
 
     public float getDispersion()
